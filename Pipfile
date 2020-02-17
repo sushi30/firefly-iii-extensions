@@ -1,0 +1,40 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+pytest = "*"
+python-dotenv = "*"
+pytest-freezegun = "*"
+click = "*"
+
+[packages]
+xlrd = "*"
+pyjwt = "*"
+cryptography = "*"
+pandas = "*"
+cashflow = "*"
+marshmallow = "*"
+sqlalchemy = "*"
+flask = "*"
+flask-cors = "*"
+python-dotenv = "*"
+Flask-Assets = "==0.12"
+Flask-Compress = "==1.4.0"
+Flask-Login = "==0.4.1"
+Flask-Mail = "==0.9.1"
+Flask-Migrate = "==2.5.2"
+Flask-RQ ="==0.2"
+Flask-Script = "==2.0.6"
+Flask-SQLAlchemy = "==2.4.0"
+Flask-SSLify = "==0.1.5"
+Flask-WTF = "==0.14.2"
+alembic = "==1.1.0"
+Jinja2 = "==2.10.1"
+raygun4py = "==4.3.0"
+flask-restplus = "*"
+mysql-client = "*"
+
+[requires]
+python_version = "3.7"

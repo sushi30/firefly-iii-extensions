@@ -1,0 +1,23 @@
+{
+  "transactions": [
+    {
+      "type": "withdrawal",
+      "date": "2018-09-17",
+      "amount": 12.95,
+      "description": "Vegetables",
+      "currency_id": 12,
+      "currency_code": "EUR",
+      "foreign_amount": 16.95,
+      "foreign_currency_code": "USD",
+      "budget_name": 4,
+      "category_name": "Groceries",
+      "source_name": "  Checking account",
+      "destination_name": "Buy and Large",
+      "bill_name": "Monthly rent",
+      "tags": null,
+      "notes": "Some example notes",
+      "internal_reference": "string",
+      "external_id": "string"
+    }
+  ]
+}
