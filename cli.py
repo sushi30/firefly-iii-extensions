@@ -1,13 +1,14 @@
+import json
 import os
 import click
 from dotenv import load_dotenv
 from tqdm import tqdm
 
-from parsers.api_calls import post_budget, post_tag, post_category
-from parsers.excel_to_records import leumicard_excel_to_records
-from parsers.external_ids import add_external_ids
-from parsers.post_transactions import post_transaction, validate_transactions
-from parsers.transform_transactions import transform_transactions
+from src.api_calls import post_budget, post_tag, post_category, get_transactions
+from src.excel_to_records import leumicard_excel_to_records
+from src.external_ids import add_external_ids
+from src.api_calls import post_transaction, validate_transactions
+from src.transform_transactions import transform_transactions
 
 load_dotenv()
 
@@ -34,6 +35,17 @@ def budget(budget_name):
     post_budget(budget_name)
     post_tag(budget_name)
     post_category(budget_name)
+
+@cli.group()
+def transactions():
+    pass
+
+@transactions.command()
+@click.argument("parameters", required=False)
+def delete(parameters):
+    parameters = json.loads(parameters or "{}")
+    res = get_transactions(parameters)
+    print(res.json())
 
 
 @cli.command()

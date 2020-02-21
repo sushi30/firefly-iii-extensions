@@ -20,6 +20,14 @@ def post_wrapper(*args, **kwargs):
     return res
 
 
+def get_wrapper(*args, **kwargs):
+    res = requests.get(*args, **kwargs)
+    res.raise_for_status()
+    if "login" in res.url:
+        raise Exception("Firefly III Login")
+    return res
+
+
 def post_transaction(transaction):
     return post_wrapper(
         os.environ["ENDPOINT"] + "/api/v1/transactions",
@@ -68,6 +76,17 @@ def post_category(category):
     return post_wrapper(
         os.environ["ENDPOINT"] + "/api/v1/categories",
         json={"name": category},
+        headers={
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + os.environ["TOKEN"],
+        },
+    )
+
+
+def get_transactions(parameters):
+    return get_wrapper(
+        os.environ["ENDPOINT"] + "/api/v1/transactions",
+        params=parameters,
         headers={
             "Content-Type": "application/json",
             "Authorization": "Bearer " + os.environ["TOKEN"],
