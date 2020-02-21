@@ -20,6 +20,13 @@ def post_wrapper(*args, **kwargs):
     return res
 
 
+def response_wrapper(res):
+    res.raise_for_status()
+    if "login" in res.url:
+        raise Exception("Firefly III Login")
+    return res
+
+
 def get_wrapper(*args, **kwargs):
     res = requests.get(*args, **kwargs)
     res.raise_for_status()

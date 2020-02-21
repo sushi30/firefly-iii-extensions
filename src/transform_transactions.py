@@ -1,6 +1,7 @@
 from datetime import datetime
 import json
 import re
+from typing import List, Dict
 from uuid import uuid4
 
 
@@ -51,7 +52,7 @@ def type_transformer(transaction, source):
         return "deposit"
 
 
-column_configs = [
+column_configs: List[Dict] = [
     {"source": "סכום חיוב", "dest": "type", "transformer": type_transformer},
     {"source": "תאריך עסקה", "dest": "date", "transformer": date_transformer},
     {"source": "שם בית העסק", "dest": "description"},

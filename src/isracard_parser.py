@@ -1,6 +1,4 @@
 import xlrd
-from parsers.transaction import Transaction
-from .base_parser import Parser
 
 
 class IsraCardParser(Parser):
