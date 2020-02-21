@@ -4,6 +4,7 @@ import click
 from dotenv import load_dotenv
 from tqdm import tqdm
 
+from rules import import_rules
 from src.api_calls import post_budget, post_tag, post_category, get_transactions
 from src.excel_to_records import leumicard_excel_to_records
 from src.external_ids import add_external_ids
@@ -41,6 +42,17 @@ def budget(budget_name):
 @cli.group()
 def transactions():
     pass
+
+
+@cli.group()
+def rules():
+    pass
+
+
+@rules.command("import")
+@click.argument("path", type=click.File(mode="r", encoding="utf8"))
+def _import(path):
+    import_rules(path)
 
 
 @transactions.command()
