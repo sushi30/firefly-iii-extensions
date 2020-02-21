@@ -1,6 +1,15 @@
 import os
-
+import yaml
 import requests
+from jsonschema import validate
+
+with open("schemas/TransactionSplit.yaml") as fp:
+    transaction_schema = yaml.load(fp, Loader=yaml.FullLoader)
+
+
+def validate_transactions(transactions: list):
+    for transaction in transactions:
+        validate(transaction, transaction_schema["TransactionSplit"])
 
 
 def post_transaction(transaction):

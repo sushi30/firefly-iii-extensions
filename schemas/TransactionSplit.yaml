@@ -2,8 +2,8 @@ TransactionSplit:
   type: object
   required:
     - amount
-    - source_id
-    - destination_id
+    - source_name
+    - destination_name
     - date
     - description
   properties:
