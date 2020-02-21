@@ -75,7 +75,7 @@ def leumicard(path):
     print("adding ids")
     transactions = add_external_ids(transactions, os.path.basename(path.name))
     print("validating schemas")
-    validate_transactions(transactions[:2])
+    validate_transactions(transactions)
     print("posting to firefly iii")
     for transaction in tqdm(transactions):
         post_transaction(transaction)

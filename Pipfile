@@ -19,6 +19,7 @@ tqdm = "*"
 pyyaml = "*"
 click = "*"
 python-dotenv = "*"
+dollar-ref = "*"
 
 [requires]
 python_version = "3.7"
