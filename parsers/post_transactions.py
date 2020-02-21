@@ -1,5 +1,4 @@
 import os
-
 import requests
 
 
@@ -15,15 +14,4 @@ def post_transaction(transaction):
     res.raise_for_status()
     if "login" in res.url:
         raise Exception("Firefly III Login")
-    return res
-
-
-def post_transactions(transactions):
-    res = []
-    for transaction in transactions:
-        try:
-            res.append(post_transaction(transaction))
-        except:
-            print(transaction)
-            raise
     return res

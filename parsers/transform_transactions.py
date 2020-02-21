@@ -92,7 +92,7 @@ def transform_transaction(transaction: dict):
         **transformed,
         **{
             "currency_code": "ILS",
-            "source_name": "Leumi 3582271",
+            "source_name": "Leumi",
             "notes": json.dumps(transaction, ensure_ascii=False),
             "external_id": uuid4().hex,
         },
@@ -107,3 +107,7 @@ def transform_transaction(transaction: dict):
 def transform_transactions(transactions):
     res = [transform_transaction(transaction) for transaction in transactions]
     return res
+
+
+def external_ids(transactions, base):
+    res = [{**t, external_id: uuid5()} for t in transactions]
