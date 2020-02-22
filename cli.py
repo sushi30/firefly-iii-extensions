@@ -3,14 +3,11 @@ import os
 import click
 from dotenv import load_dotenv
 from tqdm import tqdm
-
+from lib import cli_leumi
 from rules import import_rules
-from src.api_calls import post_budget, post_tag, post_category, get_transactions
-from src.excel_to_records import leumicard_excel_to_records
-from src.external_ids import add_external_ids
-from src.api_calls import post_transaction, validate_transactions
+from src.api_calls import get_transactions, post_budget, post_category, post_tag, post_transaction, \
+    validate_transactions
 from src.transaction import Transaction
-from src.transform_transactions import transform_transactions
 
 load_dotenv()
 
@@ -79,6 +76,12 @@ def leumicard(path):
     print("posting to firefly iii")
     for transaction in tqdm(transactions):
         post_transaction(transaction)
+
+
+@cli.command()
+@click.argument("path", type=click.File(mode="rb"))
+def leumi(path):
+    cli_leumi(path)
 
 
 if __name__ == "__main__":

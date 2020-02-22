@@ -9,8 +9,6 @@ from src.api_calls import response_wrapper
 schema: dict = {}
 for yaml_file in [
     "schemas/Rule.yaml",
-    "schemas/RuleAction.yaml",
-    "schemas/RuleTrigger.yaml",
 ]:
     with open(yaml_file) as fp:
         schema = {**schema, **yaml.load(fp, Loader=yaml.FullLoader)}

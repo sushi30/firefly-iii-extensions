@@ -1,16 +1,8 @@
 import xlrd
+from .lib import parse_rows
 
 
-def parse_rows(rows, it, categories):
-    while True:
-        try:
-            row = next(it)
-        except StopIteration:
-            break
-        rows.append({col_name: col.value for (col_name, col) in zip(categories, row)})
-
-
-def leumicard_excel_to_records(file):
+def parse_file(file):
     rows = []
     wb = xlrd.open_workbook(file_contents=file.read())
     for i in range(wb.nsheets):
