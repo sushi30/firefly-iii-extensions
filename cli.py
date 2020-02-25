@@ -1,12 +1,18 @@
-import json
+import csv
 import os
 import click
 from dotenv import load_dotenv
 from tqdm import tqdm
 from lib import cli_leumi
 from rules import import_rules
-from src.api_calls import get_transactions, post_budget, post_category, post_tag, post_transaction, \
-    validate_transactions
+from src.api_calls import (
+    get_transactions,
+    post_budget,
+    post_category,
+    post_tag,
+    post_transaction,
+    validate_transactions,
+)
 from src.transaction import Transaction
 
 load_dotenv()
@@ -53,13 +59,16 @@ def _import(path):
 
 
 @transactions.command()
-@click.argument("parameters", required=False)
-def delete(parameters):
-    parameters = json.loads(parameters or "{}")
-    res = get_transactions(parameters).json()
+@click.option("--page", type=click.INT)
+def delete(page):
+    res = get_transactions({"page": page}).json()
     transactions = [Transaction(t["id"], **t["attributes"]) for t in res["data"]]
     for transaction in tqdm(transactions):
-        transaction.delete()
+        if (
+            transaction.attributes["transactions"][0]["destination_id"] == 3
+            or transaction.attributes["transactions"][0]["source_id"] == 3
+        ):
+            transaction.delete()
 
 
 @cli.command()
@@ -82,6 +91,17 @@ def leumicard(path):
 @click.argument("path", type=click.File(mode="rb"))
 def leumi(path):
     cli_leumi(path)
+
+
+@cli.command("import")
+@click.argument("path", type=click.File(mode="r", encoding="utf8"))
+def import_(path):
+    reader = csv.DictReader(path)
+    rows = [r for r in reader]
+    print("posting transactions")
+    for row in tqdm(rows):
+        print("{type} - {description} - {date} - {amount}".format(**row))
+        # post_transaction(row)
 
 
 if __name__ == "__main__":

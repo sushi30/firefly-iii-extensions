@@ -1,10 +1,10 @@
 import csv
+import itertools
 
 
-def write_csv(transactions):
-    with open("names.csv", "w", newline="", encoding="utf8") as csvfile:
-        writer = csv.DictWriter(
-            csvfile, delimiter="\t", fieldnames=list(transactions[0].keys())
-        )
+def write_csv(path, transactions):
+    columns = list(set(itertools.chain(*[t.keys() for t in transactions])))
+    with open(path, "w", newline="", encoding="utf8") as csv_file:
+        writer = csv.DictWriter(csv_file, delimiter=",", fieldnames=columns)
         writer.writeheader()
         writer.writerows(transactions)

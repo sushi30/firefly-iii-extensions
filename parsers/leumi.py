@@ -27,7 +27,8 @@ def parse_transaction(transaction: dict):
     if type(transaction["תאריך"]) == str:
         res["date"] = datetime.strptime(transaction["תאריך"], "%d/%m/%y")
     else:
-        res["date"] = datetime(1900, 1, 1) + timedelta(days=transaction["תאריך"] - 2)
+        date = datetime(1900, 1, 1) + timedelta(days=transaction["תאריך"] - 2)
+        res["date"] = datetime(date.year, date.day, date.month)
     res["date"] = res["date"].isoformat().split("T")[0]
     if len(str(transaction["חובה"])) > len(str(transaction["זכות"])):
         res["type"] = "withdrawal"
@@ -37,4 +38,14 @@ def parse_transaction(transaction: dict):
         res["amount"] = float(transaction["זכות"])
     res["description"] = transaction["תיאור"]
     res["notes"] = json.dumps(transaction, ensure_ascii=False)
+    return res
+
+
+def filter_transactions(transactions):
+    res = []
+    for transaction in transactions:
+        if "לאומי ויזה" in transaction["description"]:
+            continue
+        else:
+            res.append(transaction)
     return res
