@@ -22,5 +22,5 @@ def cli_leumi(file):
     transactions = add_external_ids(transformed, os.path.basename(file.name))
     print("validating schemas")
     validate_transactions(transactions)
-    print("posting to firefly iii")
+    print("writing to csv")
     write_csv("tmp/leumi.csv", transactions)

@@ -93,15 +93,15 @@ def leumi(path):
     cli_leumi(path)
 
 
-@cli.command("import")
+@cli.command()
 @click.argument("path", type=click.File(mode="r", encoding="utf8"))
-def import_(path):
+def import_csv(path):
     reader = csv.DictReader(path)
     rows = [r for r in reader]
     print("posting transactions")
     for row in tqdm(rows):
         print("{type} - {description} - {date} - {amount}".format(**row))
-        # post_transaction(row)
+        post_transaction(row)
 
 
 if __name__ == "__main__":
