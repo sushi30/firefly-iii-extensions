@@ -87,7 +87,7 @@ def leumicard(path):
     print("validating schemas")
     validate_transactions(transactions)
     print("writing to csv")
-    write_csv("tmp/leumicard.csv", transactions)
+    write_csv("tmp/leumicard.csv", sorted(transactions, key=lambda x: x["date"]))
 
 
 @cli.command()
@@ -98,12 +98,13 @@ def leumi(path):
 
 @cli.command()
 @click.argument("path", type=click.File(mode="r", encoding="utf8"))
-def import_csv(path):
+@click.option("--start", "-s", type=click.INT, default=0)
+def import_csv(path, start):
     reader = csv.DictReader(path)
     rows = [r for r in reader]
     print("posting transactions")
-    for row in tqdm(rows):
-        print("{type} - {description} - {date} - {amount}".format(**row))
+    for row in tqdm(rows[start:]):
+        print("\n{type} - {description} - {date} - {amount}".format(**row))
         post_transaction(row)
 
 
