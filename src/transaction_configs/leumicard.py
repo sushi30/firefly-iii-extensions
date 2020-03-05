@@ -1,3 +1,6 @@
+from datetime import datetime
+import json
+import re
 from typing import List, Dict
 
 
@@ -69,3 +72,45 @@ column_configs: List[Dict] = [
         "transformer": credit_card_name_transformer,
     },
 ]
+
+
+def transform_transaction(transaction: dict):
+    transformed = {}
+    for conf in column_configs:
+        try:
+            transformers = conf.get("transformer", default_transformer)
+            if not isinstance(transformers, list):
+                transformers = [transformers]
+            temp = transaction.copy()
+            for transformer in transformers:
+                temp[conf["source"]] = transformer(temp, conf["source"])
+            transformed[conf["dest"]] = temp[conf["source"]]
+        except:
+            print(transaction)
+            raise
+    transformed = {
+        **transformed,
+        **{
+            "currency_code": "ILS",
+            "source_name": "Leumi",
+            "notes": json.dumps(transaction, ensure_ascii=False),
+        },
+    }
+    if transformed["type"] == "deposit":
+        temp = transformed["source_name"]
+        transformed["source_name"] = transformed["destination_name"]
+        transformed["destination_name"] = temp
+    return transformed
+
+
+def transform_transactions(transactions: list) -> list:
+    res = []
+    for transaction in transactions:
+        transformed = transform_transaction(transaction)
+        res.append(transformed)
+        print(
+            "processed: {date} - {type} - {description} - {amount}".format(
+                **transformed
+            )
+        )
+    return res

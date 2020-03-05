@@ -4,6 +4,8 @@ import click
 from dotenv import load_dotenv
 from tqdm import tqdm
 from lib import cli_leumi
+from parsers.leumicard import parse_file
+from parsers.lib import add_external_ids
 from rules import import_rules
 from src.api_calls import (
     get_transactions,
@@ -14,6 +16,8 @@ from src.api_calls import (
     validate_transactions,
 )
 from src.transaction import Transaction
+from src.transaction_configs.leumicard import transform_transactions
+from src.writers import write_csv
 
 load_dotenv()
 
@@ -75,16 +79,15 @@ def delete(page):
 @click.argument("path", type=click.File(mode="rb"))
 def leumicard(path):
     print("turning csv to records")
-    transactions = leumicard_excel_to_records(path)
+    transactions = parse_file(path)
     print("transform to transactions")
     transactions = transform_transactions(transactions)
     print("adding ids")
     transactions = add_external_ids(transactions, os.path.basename(path.name))
     print("validating schemas")
     validate_transactions(transactions)
-    print("posting to firefly iii")
-    for transaction in tqdm(transactions):
-        post_transaction(transaction)
+    print("writing to csv")
+    write_csv("tmp/leumicard.csv", transactions)
 
 
 @cli.command()
