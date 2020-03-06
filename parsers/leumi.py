@@ -1,24 +1,17 @@
 from datetime import datetime, timedelta
 import json
-import xlrd
-from .lib import parse_rows
+from lxml import html
 
 
-def parse_excel(file):
-    rows = []
-    wb = xlrd.open_workbook(file_contents=file.read())
-    for i in range(wb.nsheets):
-        it = iter(wb.sheet_by_index(i).get_rows())
-        while True:
-            try:
-                row = next(it)
-            except StopIteration:
-                break
-            if type(row[0].value) == str and "תנועות בחשבון" == row[0].value:
-                for _ in range(4):
-                    row = next(it)
-                categories = [col.value for col in row]
-                parse_rows(rows, it, categories)
+def parse_html(file):
+    root = html.fromstring(file.read())
+    headers = root.xpath(
+        "//table[@id='WorkSpaceBox']//tr[@class='header']//th[not(contains(@class,'Hidden'))]"
+    )[1:]
+    categories = [h.text_content().strip() for h in headers]
+    rows = root.xpath("//table[@id='WorkSpaceBox']//tr[contains(@class, 'Item')]")
+    rows = [[c.text_content().strip() for c in row.getchildren()][1:7] for row in rows]
+    rows = [dict(zip(categories, row)) for row in rows]
     return rows
 
 
@@ -32,10 +25,10 @@ def parse_transaction(transaction: dict):
     res["date"] = res["date"].isoformat().split("T")[0]
     if len(str(transaction["חובה"])) > len(str(transaction["זכות"])):
         res["type"] = "withdrawal"
-        res["amount"] = float(transaction["חובה"])
+        res["amount"] = float(transaction["חובה"].replace(",", ""))
     else:
         res["type"] = "deposit"
-        res["amount"] = float(transaction["זכות"])
+        res["amount"] = float(transaction["זכות"].replace(",", ""))
     res["description"] = transaction["תיאור"]
     res["notes"] = json.dumps(transaction, ensure_ascii=False)
     return res

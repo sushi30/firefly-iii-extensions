@@ -1,14 +1,13 @@
 import os
-from tqdm import tqdm
-from parsers.leumi import parse_excel, parse_transaction, filter_transactions
+from parsers.leumi import filter_transactions, parse_html, parse_transaction
 from parsers.lib import add_external_ids, transaction_defaults
-from src.api_calls import validate_transactions, post_transaction
+from src.api_calls import validate_transactions
 from src.writers import write_csv
 
 
 def cli_leumi(file):
     print("turning excel to records")
-    transactions = parse_excel(file)
+    transactions = parse_html(file)
     print("parsing transactions")
     transformed = []
     for transaction in transactions:
