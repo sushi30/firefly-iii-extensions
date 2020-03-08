@@ -27,17 +27,6 @@ def cli():
     pass
 
 
-def decorate(f):
-    for dec in [
-        click.argument("path", type=click.File(mode="rb")),
-        click.option("--out", default=None),
-        click.option("--storage", default=None),
-        cli.command(),
-    ]:
-        f = dec(f)
-    return f
-
-
 @cli.command()
 @click.argument("budget_name")
 def budget(budget_name):
@@ -91,7 +80,7 @@ def leumicard(path):
 
 
 @cli.command()
-@click.argument("path", type=click.File(mode="rb"))
+@click.argument("path", type=click.File(mode="r", encoding="utf8"))
 def leumi(path):
     cli_leumi(path)
 

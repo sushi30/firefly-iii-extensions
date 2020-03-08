@@ -20,6 +20,8 @@ pyyaml = "*"
 click = "*"
 python-dotenv = "*"
 dollar-ref = "*"
+beautifulsoup4 = "*"
+lxml = "*"
 
 [requires]
 python_version = "3.7"
